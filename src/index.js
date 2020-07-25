@@ -3,13 +3,21 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import chatApp from "./store/reducers";
 
+import "./public/globalStyle.css";
 import { ApolloProvider } from "@apollo/client";
-import client from "./services/apolloClient";
+import client from "./services/api";
+
+const store = createStore(chatApp);
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </ApolloProvider>,
   document.getElementById("root")
 );

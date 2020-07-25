@@ -1,73 +1,73 @@
 import React, { useEffect } from "react";
 import "./App.css";
-import { useQuery, gql, useMutation, useSubscription } from "@apollo/client";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+} from "react-router-dom";
 
-const GET_MESSAGES = gql`
-  query {
-    messages {
-      id
-      text
-    }
-  }
-`;
+import SignUp from "./Pages/SignUp";
+import SignIn from "./Pages/SignIn";
+import Chat from "./Pages/Chat";
 
-const GET_USERS = gql`
-  {
-    users {
-      id
-      username
-    }
-  }
-`;
+import { isAuthenticated } from "./services/auth";
 
-const LOGIN = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password) {
-      id
-      token
-      username
-    }
-  }
-`;
-
-const MESSAGES_SUBSCRIPTION = gql`
-  subscription {
-    newMessage {
-      id
-      text
-    }
-  }
-`;
-
-function App() {
-  const { subscribeToMore, ...result } = useQuery(GET_MESSAGES);
-
-  const subscribeToNewMessages = () => {
-    subscribeToMore({
-      document: MESSAGES_SUBSCRIPTION,
-      updateQuery: (prev, { subscriptionData }) => {
-        try {
-          if (!subscriptionData.data) return prev;
-          const newMessageItem = subscriptionData.data.newMessage;
-          console.log("Atualizando");
-          return { messages: [...prev.messages, newMessageItem] };
-        } catch (err) {
-          throw new Error("erro");
-        }
-      },
-    });
-  };
-
-  useEffect(() => {
-    subscribeToNewMessages();
-  }, []);
-
+const App = () => {
   return (
-    <div className="App">
-      {!result.loading &&
-        result.data.messages.map((item) => <p>{item.text}</p>)}
-    </div>
+    <Router>
+      <Switch>
+        {isAuthenticated() ? (
+          <>
+            <Route path="/" exact component={Chat} />
+          </>
+        ) : (
+          <>
+            <Route path="/login" exact component={SignIn} />
+            <Route path="/signup" exact component={SignUp} />
+          </>
+        )}
+        <Route exact path="*">
+          {isAuthenticated() ? (
+            <Redirect to={{ pathname: "/" }} />
+          ) : (
+            <Redirect to={{ pathname: "/login" }} />
+          )}
+        </Route>
+      </Switch>
+    </Router>
   );
-}
+};
+
+// function App() {
+//   const { subscribeToMore, ...result } = useQuery(GET_MESSAGES);
+
+//   useEffect(() => {
+//     const subscribeToNewMessages = () => {
+//       subscribeToMore({
+//         document: MESSAGES_SUBSCRIPTION,
+//         updateQuery: (prev, { subscriptionData }) => {
+//           try {
+//             if (!subscriptionData.data) return prev;
+//             const newMessageItem = subscriptionData.data.newMessage;
+//             console.log("Atualizando");
+//             return { messages: [...prev.messages, newMessageItem] };
+//           } catch (err) {
+//             throw new Error("erro");
+//           }
+//         },
+//       });
+//     };
+//     subscribeToNewMessages();
+//   }, [subscribeToMore]);
+
+//   return (
+//     <div className="App">
+//       {!result.loading &&
+//         result.data.messages.map((item) => <p>{item.text}</p>)}
+//     </div>
+//   );
+// }
 
 export default App;

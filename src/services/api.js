@@ -4,17 +4,23 @@ import { getMainDefinition } from "@apollo/client/utilities";
 
 import { HttpLink, split } from "@apollo/client";
 
+import { getToken } from "./auth";
+
+const token = getToken();
+
 const httpLink = new HttpLink({
-  uri: "http://localhost:4000/",
+  uri: "http://192.168.0.114:4000/",
+  headers: {
+    authorization: token ? token : "",
+  },
 });
 
 const wsLink = new WebSocketLink({
-  uri: "ws://localhost:4000/graphql",
+  uri: "ws://192.168.0.114:4000/graphql",
   options: {
     reconnect: true,
     connectionParams: {
-      authToken:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmMWIyZDhhZWYwODExMjM2MTk3NmFmNyIsImlhdCI6MTU5NTYzNzg0OH0.XWZfGlaTrmZN6kJXAYx8PqrS5yzwxz7NUzLNN4QaHo4",
+      authToken: token,
     },
   },
 });
