@@ -1,13 +1,21 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useQuery, gql, useMutation, useSubscription } from "@apollo/client";
+import {
+  useQuery,
+  gql,
+  useMutation,
+  useSubscription,
+  useApolloClient,
+} from "@apollo/client";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import Message from "../../Components/Message";
+import SideMenu from "../../Components/SideMenu";
+
 import "./style.css";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { addMessage, fetchMessages } from "../../store/actions";
+import { addMessage, fetchMessages, removeMessage } from "../../store/actions";
 
 const GET_USERS = gql`
   query {
@@ -31,15 +39,18 @@ const GET_MESSAGES = gql`
   }
 `;
 
-const MESSAGES_SUBSCRIPTION = gql`
+const CHAT_SUBSCRIPTION = gql`
   subscription {
-    newMessage {
-      _id
-      text
-      createdAt
-      users {
-        username
+    updateChat {
+      message {
+        _id
+        text
+        createdAt
+        users {
+          username
+        }
       }
+      mutationType
     }
   }
 `;
@@ -55,8 +66,13 @@ const NEWMESSAGE_MUTATION = gql`
 `;
 
 const ChatContainer = () => {
-  const { data, loading } = useSubscription(MESSAGES_SUBSCRIPTION);
+  const { data } = useSubscription(CHAT_SUBSCRIPTION);
+
   const messages = useSelector((state) => state.messages);
+  const currentUser = useSelector((state) => state.currentUser);
+
+  const [canDelete, setCanDelete] = useState(false);
+
   const divRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -64,27 +80,47 @@ const ChatContainer = () => {
     (newMessage) => dispatch(addMessage(newMessage)),
     [dispatch]
   );
+
+  const dispatchDeleteMessage = useCallback(
+    (message) => dispatch(removeMessage(message)),
+    [dispatch]
+  );
+
   useEffect(() => {
-    if (data) dispatchNewMessage(data.newMessage);
-  }, [data, dispatchNewMessage]);
+    if (data) {
+      if (data.updateChat.mutationType === "CREATE")
+        dispatchNewMessage(data.updateChat.message);
+      else if (data.updateChat.mutationType === "DELETE")
+        dispatchDeleteMessage(data.updateChat.message);
+    }
+  }, [data, dispatchNewMessage, dispatchDeleteMessage]);
 
   useEffect(() => {
     divRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [divRef]);
+  }, [messages]);
+
+  useEffect(() => {
+    console.log(currentUser);
+    setCanDelete(currentUser && currentUser.userType === 2);
+  }, [currentUser]);
+
   return (
     <div className="chat-container">
-      <TransitionGroup component={null}>
-        {messages.map((item) => (
-          <CSSTransition key={item._id} timeout={350} classNames="message">
-            <Message
-              id={item._id}
-              createdAt={item.createdAt}
-              username={item.users.username}
-              text={item.text}
-            />
-          </CSSTransition>
-        ))}
-      </TransitionGroup>
+      {messages && currentUser && (
+        <TransitionGroup component={null}>
+          {messages.map((item) => (
+            <CSSTransition key={item._id} timeout={350} classNames="message">
+              <Message
+                id={item._id}
+                createdAt={item.createdAt}
+                username={item.users.username}
+                text={item.text}
+                canDelete={canDelete}
+              />
+            </CSSTransition>
+          ))}
+        </TransitionGroup>
+      )}
       <div className="dummy-div" ref={divRef}></div>
     </div>
   );
@@ -123,6 +159,7 @@ const Chat = () => {
 
   return (
     <div className="chat-screen">
+      <SideMenu />
       <ChatContainer />
       <div className="">
         <form className="actions-container" onSubmit={handleSubmit}>

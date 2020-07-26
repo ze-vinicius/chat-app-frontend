@@ -1,0 +1,38 @@
+.profileContainer {
+  display: flex;
+  align-items: center;
+}
+
+.profileIcon {
+  margin-right: 16px;
+}
+
+.profileIcon svg {
+  stroke: #fff;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileUsername {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.profileStatus {
+  /* background-color: #26de81; */
+  background-color: #263859;
+  color: #e3e4e4;
+  line-height: 18px;
+  font-size: 12px;
+  padding: 0 8px;
+  text-align: center;
+  border-radius: 4px;
+  /* color: #fff; */
+  /* padding: 4px; */
+}

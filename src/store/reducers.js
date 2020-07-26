@@ -1,4 +1,11 @@
-import { login, LOGIN, NEW_MESSAGE, FETCH_MESSAGES } from "./actions";
+import {
+  LOGIN,
+  NEW_MESSAGE,
+  FETCH_MESSAGES,
+  DELETE_MESSAGE,
+  FETCH_USERS,
+  ADD_ONLINE_USER,
+} from "./actions";
 
 const initialState = {
   user: null,
@@ -10,7 +17,7 @@ export default function chatApp(state = initialState, action) {
     case LOGIN:
       return {
         ...state,
-        user: action.user,
+        currentUser: action.user,
       };
     case NEW_MESSAGE:
       return {
@@ -21,6 +28,26 @@ export default function chatApp(state = initialState, action) {
       return {
         ...state,
         messages: action.messages,
+      };
+    case DELETE_MESSAGE:
+      return {
+        ...state,
+        messages: state.messages.filter(
+          (item) => item._id !== action.message._id
+        ),
+      };
+    case FETCH_USERS:
+      return {
+        ...state,
+        users: action.users,
+      };
+    case ADD_ONLINE_USER:
+      return {
+        ...state,
+        users: [
+          ...state.users.filter((item) => item._id !== action.user._id),
+          action.user,
+        ],
       };
     default:
       return state;

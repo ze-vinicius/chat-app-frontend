@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
+import { Trash2 } from "react-feather";
 import "./style.css";
+import { gql, useMutation } from "@apollo/client";
 
-const Message = ({ id, createdAt, username, text }) => {
-  const [sendDate, setSendDate] = React.useState();
-  const [sendTime, setSendTime] = React.useState();
+const DELETE_MESSAGE_MUTATION = gql`
+  mutation deleteMessage($messageId: String!) {
+    deleteMessage(messageId: $messageId) {
+      _id
+    }
+  }
+`;
+
+const Message = ({ id, createdAt, username, text, canDelete }) => {
+  const [sendDate, setSendDate] = useState();
+  const [sendTime, setSendTime] = useState();
+  const [disabled, setDisabled] = useState(false);
+
+  const [deleteMessage] = useMutation(DELETE_MESSAGE_MUTATION);
 
   React.useEffect(() => {
     const dateFormater = (unix_timestamp) => {
@@ -17,12 +30,32 @@ const Message = ({ id, createdAt, username, text }) => {
     if (createdAt) dateFormater(createdAt);
   }, [createdAt]);
 
+  const handleDelete = async () => {
+    setDisabled(true);
+    try {
+      const { error } = deleteMessage({ variables: { messageId: id } });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="messageContainer">
       <div className="messageHeader">
-        <span className="sendDate">{sendDate} -</span>
-        <span className="messageAuthor">{username}</span>
-        <span className="sendTime">{sendTime}</span>
+        <div className="messageInfo">
+          <span className="sendDate">{sendDate} -</span>
+          <span className="messageAuthor">{username}</span>
+          <span className="sendTime">{sendTime}</span>
+        </div>
+        {canDelete && (
+          <button
+            className="btnDelete"
+            disabled={disabled}
+            onClick={handleDelete}
+          >
+            <Trash2 size={24} color={"#17223b"} />
+          </button>
+        )}
       </div>
       <p className="messageText">{text}</p>
     </div>

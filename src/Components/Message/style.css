@@ -19,6 +19,7 @@ p {
   display: flex;
   align-items: center;
   margin-bottom: 8px;
+  justify-content: space-between;
 }
 .sendDate {
   color: #fff;
@@ -39,4 +40,31 @@ p {
 .messageText {
   font-size: 12px;
   color: #e3e4e4;
+}
+
+.btnDelete {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 4px 8px;
+  align-self: end;
+  margin-left: 32px;
+  transition: all 0.2s ease;
+}
+
+.btnDelete:hover {
+  background-color: #e23636;
+}
+
+.btnDelete::focus {
+  outline: none;
+}
+
+.btnDelete svg {
+  transition: all 0.2s ease;
+}
+
+.btnDelete:hover svg {
+  stroke: #fff;
 }
