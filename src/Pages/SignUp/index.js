@@ -5,8 +5,8 @@ import { useHistory, Link } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 
 const SIGNUP = gql`
-  mutation signUp($username: String!, $password: String!) {
-    signUp(username: $username, password: $password, userType: 1) {
+  mutation signUp($username: String!, $password: String!, $userType: String!) {
+    signUp(username: $username, password: $password, userType: $userType) {
       _id
       username
       userType
@@ -18,6 +18,7 @@ const SIGNUP = gql`
 const SignUp = () => {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [userType, setUserType] = React.useState("");
   const [errorMessage, setErrorMessage] = React.useState("");
 
   const [signUp] = useMutation(SIGNUP);
@@ -30,6 +31,10 @@ const SignUp = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+  const handleUserTypeChange = (event) => {
+    setUserType(event.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -37,7 +42,11 @@ const SignUp = () => {
       if (password === "") throw new Error("A senha não pode ficar vazia!");
 
       const { data, loading, error } = await signUp({
-        variables: { username: username, password: password },
+        variables: {
+          username: username,
+          password: password,
+          userType: userType,
+        },
       });
 
       if (loading) {
@@ -86,6 +95,21 @@ const SignUp = () => {
             className="input"
             onChange={handlePasswordChange}
           />
+        </div>
+        <div className="formGroup">
+          <label htmlFor="userType" className="label">
+            Tipo de usuário
+          </label>
+          <select
+            value={userType}
+            type="userType"
+            name="userType"
+            className="input"
+            onChange={handleUserTypeChange}
+          >
+            <option value="1"> Participante </option>
+            <option value="2"> Administrador </option>
+          </select>
         </div>
         <CSSTransition
           in={errorMessage !== ""}

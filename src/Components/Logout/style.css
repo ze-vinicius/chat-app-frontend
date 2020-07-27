@@ -1,0 +1,27 @@
+.btnLogout {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 8px 12px;
+  align-self: end;
+  margin-left: 32px;
+  transition: all 0.2s ease;
+}
+
+.btnLogout:hover {
+  background-color: #e23636;
+}
+
+.btnLogout::focus {
+  outline: none;
+}
+
+.btnLogout svg {
+  transition: all 0.2s ease;
+  stroke: #6b778d;
+}
+
+.btnLogout:hover svg {
+  stroke: #fff;
+}

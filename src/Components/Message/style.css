@@ -59,7 +59,7 @@ p {
   background-color: #e23636;
 }
 
-.btnDelete::focus {
+.btnDelete:focus {
   outline: none;
 }
 
