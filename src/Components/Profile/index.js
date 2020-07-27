@@ -27,6 +27,7 @@ const FETCH_USERS = gql`
 const UPDATE_LASTSEEN_MUTATION = gql`
   mutation {
     updateLastSeen {
+      _id
       username
       lastseen
     }
@@ -39,14 +40,6 @@ const Profile = () => {
   const [updateLastSeen] = useMutation(UPDATE_LASTSEEN_MUTATION);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    setOnlineIndicator(setInterval(() => updateLastSeen(), 10000));
-
-    return () => {
-      clearInterval(onlineIndicator);
-    };
-  }, [updateLastSeen]);
-
   const dispatchLogin = useCallback(
     (user) => {
       dispatch(login(user));
@@ -55,8 +48,23 @@ const Profile = () => {
   );
 
   useEffect(() => {
-    if (data) dispatchLogin(data.currentUser);
-  }, [data, dispatchLogin]);
+    setOnlineIndicator(
+      setInterval(() => {
+        updateLastSeen();
+      }, 10000)
+    );
+
+    return () => {
+      clearInterval(onlineIndicator);
+    };
+  }, [updateLastSeen]);
+
+  useEffect(() => {
+    if (data) {
+      dispatchLogin(data.currentUser);
+      updateLastSeen();
+    }
+  }, [data, dispatchLogin, updateLastSeen]);
 
   if (loading) return <span></span>;
 

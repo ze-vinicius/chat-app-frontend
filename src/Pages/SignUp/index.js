@@ -45,6 +45,7 @@ const SignUp = () => {
       } else {
         signin(data.signUp.token);
         history.push("/");
+        window.location.reload();
       }
     } catch (error) {
       showError(error.message);

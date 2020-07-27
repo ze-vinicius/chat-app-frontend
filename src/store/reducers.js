@@ -9,7 +9,9 @@ import {
 
 const initialState = {
   user: null,
+  currentUser: null,
   messages: [],
+  filters: { sort: "asc", username: "", createdAt: "" },
 };
 
 export default function chatApp(state = initialState, action) {

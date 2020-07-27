@@ -20,7 +20,7 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     connectionParams: {
-      authorization: token ? token : "",
+      authToken: token,
     },
   },
 });

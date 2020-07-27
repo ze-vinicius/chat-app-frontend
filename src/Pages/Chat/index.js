@@ -9,13 +9,14 @@ import {
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import Message from "../../Components/Message";
-import SideMenu from "../../Components/SideMenu";
+import Header from "../../Components/Header";
 
 import "./style.css";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { addMessage, fetchMessages, removeMessage } from "../../store/actions";
+import OnlineUsersWrapper from "../../Components/OnlineUsers";
 
 const GET_USERS = gql`
   query {
@@ -27,8 +28,8 @@ const GET_USERS = gql`
 `;
 
 const GET_MESSAGES = gql`
-  query GetMessages {
-    messages {
+  query GetMessages($sort: String, $username: String, $createdAt: String) {
+    messages(sort: $sort, username: $username, createdAt: $createdAt) {
       _id
       text
       createdAt
@@ -93,6 +94,7 @@ const ChatContainer = () => {
       else if (data.updateChat.mutationType === "DELETE")
         dispatchDeleteMessage(data.updateChat.message);
     }
+    console.log(data);
   }, [data, dispatchNewMessage, dispatchDeleteMessage]);
 
   useEffect(() => {
@@ -100,12 +102,11 @@ const ChatContainer = () => {
   }, [messages]);
 
   useEffect(() => {
-    console.log(currentUser);
     setCanDelete(currentUser && currentUser.userType === 2);
   }, [currentUser]);
 
   return (
-    <div className="chat-container">
+    <div className="chatContainer">
       {messages && currentUser && (
         <TransitionGroup component={null}>
           {messages.map((item) => (
@@ -134,7 +135,15 @@ const Chat = () => {
     [dispatch]
   );
 
-  const { data, error, loading } = useQuery(GET_MESSAGES);
+  const filters = useSelector((state) => state.filters);
+
+  const { data, error, loading } = useQuery(GET_MESSAGES, {
+    variables: {
+      sort: filters.sort,
+      username: filters.username,
+      createdAt: filters.createdAt,
+    },
+  });
 
   const [messageText, setMessageText] = useState("");
 
@@ -158,24 +167,27 @@ const Chat = () => {
   };
 
   return (
-    <div className="chat-screen">
-      <SideMenu />
-      <ChatContainer />
-      <div className="">
-        <form className="actions-container" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={messageText}
-            onChange={(event) => setMessageText(event.target.value)}
-            className="message-input"
-            placeholder="Mensagem"
-            autoFocus
-            ref={messageRef}
-          />
-          <button type="submit" className="send-message-btn">
-            Enviar
-          </button>
-        </form>
+    <div className="chatApp">
+      <OnlineUsersWrapper />
+      <div className="chatScreen">
+        <Header />
+        <ChatContainer />
+        <div className="">
+          <form className="actionsContainer" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              value={messageText}
+              onChange={(event) => setMessageText(event.target.value)}
+              className="inputMessage"
+              placeholder="Mensagem"
+              autoFocus
+              ref={messageRef}
+            />
+            <button type="submit" className="btnSendMessage">
+              Enviar
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

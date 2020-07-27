@@ -1,17 +1,19 @@
 import React, { useEffect, useCallback } from "react";
 import { useQuery, gql } from "@apollo/client";
-import { useSelector } from "react-redux";
+import Logout from "../Logout";
 import Profile from "../Profile";
-import OnlineUsers from "../OnlineUsers";
+import AdminOptions from "../AdminOptions";
+
 import "./style.css";
 
-const SideMenu = () => {
+const Header = () => {
   return (
     <div className="headerContainer">
       <Profile />
-      <OnlineUsers />
+      <AdminOptions />
+      <Logout />
     </div>
   );
 };
 
-export default SideMenu;
+export default Header;

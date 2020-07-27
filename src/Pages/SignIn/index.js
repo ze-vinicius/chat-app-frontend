@@ -32,6 +32,7 @@ const SignIn = () => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
+
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -42,11 +43,14 @@ const SignIn = () => {
       const { data, loading, error } = await signIn({
         variables: { username: username, password: password },
       });
+
       if (loading) {
         console.log("Loading");
       } else {
         signin(data.signIn.token);
+
         history.push("/");
+        window.location.reload();
       }
     } catch (err) {
       showError(err.message);
