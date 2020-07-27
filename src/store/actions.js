@@ -4,6 +4,9 @@ export const FETCH_USERS = "FETCH_USERS";
 export const NEW_MESSAGE = "NEW_MESSAGE";
 export const DELETE_MESSAGE = "DELETE_MESSAGE";
 export const ADD_ONLINE_USER = "ADD_ONLINE_USER";
+export const ADD_FILTER = "ADD_FILTER";
+export const REMOVE_FILTER = "REMOVE_FILTER";
+export const CLEAN_FILTERS = "CLEAN_FILTERS";
 
 export const login = (user) => {
   return {
@@ -44,5 +47,24 @@ export const removeMessage = (message) => {
   return {
     type: DELETE_MESSAGE,
     message: message,
+  };
+};
+
+export const addFilter = (filter) => {
+  return {
+    type: ADD_FILTER,
+    filter: filter,
+  };
+};
+
+export const removeFilter = (filter) => {
+  return {
+    type: REMOVE_FILTER,
+    filter: filter,
+  };
+};
+export const cleanFilters = () => {
+  return {
+    type: CLEAN_FILTERS,
   };
 };

@@ -4,9 +4,17 @@
   /* height: 400px; */
   background-color: #fff;
   border-radius: 8px;
-  padding: 32px;
+  padding: 16px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
-
+.filtersContainer {
+  display: flex;
+  border-left: 1px solid #fff;
+  border-right: 1px solid #fff;
+  padding: 0 32px;
+  /* width: 300px; */
+  justify-content: space-between;
+}
 .modal:focus {
   outline: none;
 }
@@ -20,9 +28,85 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .calendar {
   position: relative;
+}
+
+.filtersOptionsTitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #7e50b8;
+  margin-bottom: 8px;
+}
+
+.filterGroup {
+  margin: 0 8px;
+}
+
+.filterButton {
+  padding: 4px 16px;
+  font-size: 14px;
+  border: none;
+  background-color: #263859;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  border: 2px solid #263859;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterButton:focus {
+  outline: none;
+}
+
+.filterButton svg {
+  margin-left: 8px;
+}
+
+.filterActive {
+  border: 2px solid #7e50b8;
+}
+
+.usersListTitle {
+  font-size: 24px;
+  color: #333;
+  text-align: center;
+}
+
+.usersList {
+  height: 300px;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  background-color: #263859;
+  padding: 4px;
+  border-radius: 4px;
+  overflow-y: scroll;
+}
+
+.userButton {
+  /* background-color: #263859; */
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  background-color: #7989a6;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #fff;
+}
+.userButton:hover {
+  opacity: 0.8;
+}
+
+button:focus {
+  outline: none;
 }

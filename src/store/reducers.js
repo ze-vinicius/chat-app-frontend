@@ -5,6 +5,9 @@ import {
   DELETE_MESSAGE,
   FETCH_USERS,
   ADD_ONLINE_USER,
+  ADD_FILTER,
+  REMOVE_FILTER,
+  CLEAN_FILTERS,
 } from "./actions";
 
 const initialState = {
@@ -50,6 +53,31 @@ export default function chatApp(state = initialState, action) {
           ...state.users.filter((item) => item._id !== action.user._id),
           action.user,
         ],
+      };
+    case ADD_FILTER:
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          [action.filter.name]: action.filter.value,
+        },
+      };
+    case REMOVE_FILTER:
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          [action.filter.name]: "",
+        },
+      };
+    case CLEAN_FILTERS:
+      return {
+        ...state,
+        filters: {
+          sort: "asc",
+          username: "",
+          createdAt: "",
+        },
       };
     default:
       return state;
