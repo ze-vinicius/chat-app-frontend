@@ -3,6 +3,7 @@ Backend do aplicativo web de chat em tempo real desenvolvido para um desafio.
 O app consiste basicamente de enviar e receber mensagens em tempo real em uma espécie de "grupo público", 
 os usuários do tipo administrador podem, além de enviar e receber mensagens, filtrar e apagar mensagens de outros usuários.
 
+![](https://github.com/jbsaraiva/chat-app-frontend/blob/master/public/screenshots/chatscreen.png)
 
 # O projeto
 - [frontend](https://github.com/jbsaraiva/chat-app-frontend)
