@@ -38,8 +38,8 @@ os usuários do tipo administrador podem, além de enviar e receber mensagens, f
 
 
 # Próximas etapas
-- [] Fazer um melhor gerenciamento de erros que ocorrem quando o servidor está off.
-- [] Remover o token salvo no LocalStorage quando houver algum erro de autenticação.
+- [ ] Fazer um melhor gerenciamento de erros que ocorrem quando o servidor está off.
+- [ ] Remover o token salvo no LocalStorage quando houver algum erro de autenticação.
 
 # Author
 José Vinícius - [josevsaraiva@gmail.com](josevsaraiva@gmail.com)
